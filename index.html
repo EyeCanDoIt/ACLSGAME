@@ -1,131 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ACLS Game</title>
-  <style>
-    .correct::after {
-      content: "\2713"; /* Unicode checkmark symbol */
-      color: green;
-      margin-left: 10px;
-    }
-
-    .incorrect::after {
-      content: "\2717"; /* Unicode cross symbol */
-      color: red;
-      margin-left: 10px;
-    }
-
-    /* Centering the content */
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .game-container {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .vital-signs-container {
-      position: absolute;
-      top: 10px;
-      right: 20px; /* Adjust the right position as needed */
-      background-color: black;
-      border: 2px solid blue; /* Add blue border */
-    }
-
-    .vital-sign {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      color: yellow;
-      flex-direction: row; /* Add this line */
-    }
-
-    .vital-sign-label {
-      font-size: 16px;
-      margin-right: 5px;
-      color: yellow;
-      flex: 1; /* Add this line */
-    }
-
-    .vital-sign-value {
-      width: 60px;
-      height: 25px;
-      background-color: black;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-right: 5px; /* Adjust the margin as needed */
-      flex: 1; /* Add this line */
-    }
-
-    .vital-sign-unit {
-      font-size: 12px;
-      margin-left: 5px;
-      flex: 1; /* Add this line */
-    }
-
-    .EKG-container {
-  
-      background-color: black;
-      border: 2px solid red; /* Add red border */
-    }
-
-    .home-button {
-      position: absolute;
-      top: 10px;
-      left: 20px; /* Adjust the left position as needed */
-      background-color: green; /* Change to green */
-      color: white;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none; /* Remove underline */
-    }
-
-  </style>
+    <title>Game Scenarios</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition-duration: 0.4s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-  <a href="indexmain.html" class="home-button">Home</a>
-
-  <div class="game-container">
-    <div id="prompt"></div>
-    <div id="options"></div>
-    <div id="feedback"></div>
-    <div id="score"></div>
-  </div>
-
-  <!-- Vital Signs Containers -->
-  <div class="vital-signs-container">
-    <div class="vital-sign">
-      <div class="vital-sign-label">HR</div>
-      <div class="vital-sign-value" id="heart-rate"></div>
-      <div class="vital-sign-unit"></div>
+    <div>
+        <button onclick="location.href='scenario1.html'">Scenario 1</button>
+        <button onclick="location.href='scenario2.html'">Scenario 2</button>
+        <!-- Add more buttons for more scenarios -->
     </div>
-    <div class="vital-sign">
-      <div class="vital-sign-label">NIBP</div>
-      <div class="vital-sign-value" id="blood-pressure"></div>
-      <div class="vital-sign-unit">mmHg</div>
-    </div>
-    <div class="vital-sign">
-      <div class="vital-sign-label">SpO2</div>
-      <div class="vital-sign-value" id="oxygen-saturation"></div>
-      <div class="vital-sign-unit"></div>
-    </div>
-    <div class="EKG-container">
-      <canvas id="canvas" width="300" height="100" style="background-color: black;"></canvas>
-    </div>
-  </div>
-
-  <div id="message"></div>
-  
-  <script src="game.js"></script>
 </body>
 </html>
