@@ -1,12 +1,33 @@
 const scenarios = [
-  {
+   {
     prompt: "Scenario 1: A patient is experiencing cardiac arrest. What is the first step in the ACLS algorithm?",
     options: [
       "Check for responsiveness",
       "Start CPR",
       "Administer epinephrine"
     ],
-    correctOption: 1
+    correctOption: 1,
+  },
+  
+    {
+    prompt: "What do you want to do next?",
+    options: [
+      "Apply AED pads",
+      "Stop Code Blue",
+      "Put I/O line"
+    ],
+    correctOption: 0 // Change the correct option index as needed
+  }
+  ,
+  
+    {
+    prompt: "3rd prompt?",
+    options: [
+      "3-1",
+      "3-2Stop Code Blue",
+      "Put I/O line"
+    ],
+    correctOption: 0 // Change the correct option index as needed
   }
 ];
 
@@ -18,6 +39,7 @@ let initialOxygenSaturation = 100;
 let isCPRStarted = false; // Track if CPR has started
 let cprInterval; // Interval for CPR simulation
 let oxygenInterval; // Interval for oxygen saturation update
+let imgToDelete = 0
 
 function displayScenario() {
   const scenario = scenarios[currentScenario];
@@ -41,38 +63,26 @@ function evaluateChoice(playerChoice) {
   const scenario = scenarios[currentScenario];
   const optionsElement = document.getElementById("options");
   const selectedOption = optionsElement.children[playerChoice];
-
+  if (imgToDelete === 1) {
+	const element = document.querySelector(".game-container");
+	element.removeChild(element.lastChild);
+	imgToDelete = 0;
+  }
   if (playerChoice === scenario.correctOption) {
     // Handle correct choices for the original scenario
     if (scenario.options[playerChoice] === "Administer epinephrine") {
       increaseVitalSigns(); // Call increaseVitalSigns without any parameter
     } else if (scenario.options[playerChoice] === "Start CPR") {
-      startCPR();
+	  startCPR();
+    currentScenario++;
+	displayScenario();
     }
   } else {
     // Handle incorrect choice for the original scenario
     const messageElement = document.getElementById('message');
     messageElement.textContent = 'Patient has no pulse!';
   }
-
-  // Handle choices for the new scenario
-  if (currentScenario === 1) { // Assuming this is the index of the new scenario
-    switch (playerChoice) {
-      case 0: // Apply AED pads
-        applyAEDPads();
-        break;
-      case 1: // Stop Code Blue
-        stopCodeBlue();
-        break;
-      case 2: // Put I/O line
-        putIOLine();
-        break;
-      default:
-        // Handle default case
-        break;
-    }
-  }
-
+  
   // Display appropriate message or continue to the next scenario
   if (!isCPRStarted && currentScenario < scenarios.length - 1) {
     // Allow player to continue the game if CPR hasn't started
@@ -142,33 +152,8 @@ function showEKGImage() {
   // Append the image to the game container
   const gameContainer = document.querySelector(".game-container");
   gameContainer.appendChild(ekgImage);
+  imgToDelete = 1
 
-  // Add a new scenario
-  const newScenario = {
-    prompt: "What do you want to do next?",
-    options: [
-      "Apply AED pads",
-      "Stop Code Blue",
-      "Put I/O line"
-    ],
-    correctOption: 0 // Change the correct option index as needed
-  };
-
-  // Display the new scenario
-  const promptElement = document.getElementById("prompt");
-  const optionsElement = document.getElementById("options");
-
-  promptElement.textContent = newScenario.prompt;
-  optionsElement.innerHTML = "";
-
-  newScenario.options.forEach((option, index) => {
-    const optionButton = document.createElement("button");
-    optionButton.textContent = option;
-    optionButton.addEventListener("click", () => {
-      evaluateChoice(index);
-    });
-    optionsElement.appendChild(optionButton);
-  });
 }
 
 function updateOxygenSaturation() {
