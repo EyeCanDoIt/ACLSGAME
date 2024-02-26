@@ -7,6 +7,16 @@ const scenarios = [
       "Administer epinephrine"
     ],
     correctOption: 1,
+    options_results_message: [
+      "Patient has no pulse!",
+      "CORRECT",
+      "Patient has no pulse!"
+    ],
+    options_results_action: [
+      0,
+      1,
+      2
+    ],	
   },
   
     {
@@ -16,10 +26,20 @@ const scenarios = [
       "Stop Code Blue",
       "Put I/O line"
     ],
-    correctOption: 0 // Change the correct option index as needed
+    correctOption: 0, // Change the correct option index as needed
+    options_results_message: [
+      "Patient has no pulse!",
+      "Patient has no pulse!",
+      "Patient has no pulse!"
+    ],
+    options_results_action: [
+      0,
+      0,
+      0
+    ],	
   }
   ,
-  
+ 
     {
     prompt: "3rd prompt?",
     options: [
@@ -27,9 +47,23 @@ const scenarios = [
       "3-2Stop Code Blue",
       "Put I/O line"
     ],
-    correctOption: 0 // Change the correct option index as needed
+    correctOption: 0, // Change the correct option index as needed
+    options_results_message: [
+      "Patient has no pulse!",
+      "Patient has no pulse!",
+      "Patient has no pulse!"
+    ],
+    options_results_action: [
+      0,
+      0,
+      0
+    ],	
   }
 ];
+
+// 0 = Displays a message
+// 1 = starts CPR
+// 2 = increase Vitals?
 
 let currentScenario = 0;
 let initialHeartRate = 0;
@@ -39,6 +73,7 @@ let initialOxygenSaturation = 100;
 let isCPRStarted = false; // Track if CPR has started
 let cprInterval; // Interval for CPR simulation
 let oxygenInterval; // Interval for oxygen saturation update
+let imgToDelete = 0
 
 function displayScenario() {
   const scenario = scenarios[currentScenario];
@@ -62,28 +97,30 @@ function evaluateChoice(playerChoice) {
   const scenario = scenarios[currentScenario];
   const optionsElement = document.getElementById("options");
   const selectedOption = optionsElement.children[playerChoice];
-
-  if (playerChoice === scenario.correctOption) {
-    // Handle correct choices for the original scenario
-    if (scenario.options[playerChoice] === "Administer epinephrine") {
-      increaseVitalSigns(); // Call increaseVitalSigns without any parameter
-    } else if (scenario.options[playerChoice] === "Start CPR") {
-      startCPR();
-    }
-  } else {
-    // Handle incorrect choice for the original scenario
-    const messageElement = document.getElementById('message');
-    messageElement.textContent = 'Patient has no pulse!';
+  
+  //just to check and delete any image previously placed
+  if (imgToDelete === 1) {
+	const element = document.querySelector(".game-container");
+	element.removeChild(element.lastChild);
+	imgToDelete = 0;
   }
-
-	currentScenario ++;
-	displayScenario(currentScenario);
-
-  // Display appropriate message or continue to the next scenario
-  if (!isCPRStarted && currentScenario < scenarios.length - 1) {
-    // Allow player to continue the game if CPR hasn't started
-    currentScenario++;
-    displayScenario();
+  //Clears message field
+  const messageElement = document.getElementById('message');
+  messageElement.textContent = '';
+  
+  if (scenario.options_results_action[playerChoice] === 0) {
+    messageElement.textContent = scenario.options_results_message[playerChoice];
+  }
+  else if (scenario.options_results_action[playerChoice] === 1) {
+	startCPR();
+  }
+  else if (scenario.options_results_action[playerChoice] === 2) {
+	//increaseVitalSigns();
+  }
+  
+  if (currentScenario < scenarios.length - 1) {
+  currentScenario++;
+  displayScenario();
   }
 }
 
@@ -148,6 +185,7 @@ function showEKGImage() {
   // Append the image to the game container
   const gameContainer = document.querySelector(".game-container");
   gameContainer.appendChild(ekgImage);
+  imgToDelete = 1
 
 }
 
